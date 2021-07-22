@@ -1,0 +1,455 @@
+﻿@model test_mvc.Models.View_Tasks
+@using System.Web.Mvc;
+@using PagedList.Mvc;
+@using PagedList;
+
+
+@{
+    ViewBag.Title = "Задачи";
+    bool excelFork = false;
+    string datepr = "";
+}
+<div style="padding:20px;">
+ @using (Html.BeginForm("Index", "Home", new { Model.Page_Avis_Tasks.PageNumber, excelFork, pageSize = ViewBag.psize, taskId = 0, assignedByMe = true, completed = false }, FormMethod.Post@*, new { @id = "submit_Index" }*@))
+{
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+string col_md = "col-md-12";
+string col_md_2 = "avis_display_none";
+<input id="submit_Index" type="submit" value="Search" style="display:none" />
+<button id="btn_excel" type="submit" name="excelFork" value="true" hidden></button>
+<div style="" class="">
+    <div class="col-md-6" style="padding: 0px; display: flex; padding-bottom: 15px;">
+        @Html.ActionLink("Создать", "Avis_New_Task", "Home", new { inner = false}, new { @class = "New_png" })
+    </div>
+
+    <div class="col-md-6" style="float: right !important; padding: 0px; ">
+        @Html.DropDownList("pageSize")
+        @Html.PagedListPager(Model.Page_Avis_Tasks, page => Url.Action("Index", "Home", new { page, pageSize = ViewBag.psize, assignedByMe = true, completed = false }))
+    </div>
+</div>
+@Html.TextBoxFor(Model => Model.Sort, new { @style = "display:none" })
+<div class="col-md-12 av_head av_border" style="background-color:#fff; margin-bottom:20px; padding:0px;">
+    <div class="col-md-2" style="padding-left:10px;">
+        <label class="av_thead">
+            @Html.CheckBoxFor(model => model.Sort_DueDate, new { @style = "display:none", onclick = "CheckSort('DueDate')" })
+            @Html.DisplayNameFor(model => model.Sort_DueDate)
+        </label>
+    </div>
+    <div class="col-md-2">
+        <div class="col-md-12">
+            <label class="av_thead">
+                @Html.CheckBoxFor(model => model.Sort_Task_Type, new { @style = "display:none", onclick = "CheckSort('IS_Aviscloud_Task_Type')" })
+                @Html.DisplayNameFor(model => model.Sort_Task_Type)
+            </label>
+        </div>
+        <div class="col-md-12">
+            @Html.DropDownListFor(model => Model.IS_Aviscloud_Task_Type, ViewBag.Task_Type as IEnumerable<SelectListItem>, "Выберите", new { @class = "grouped_dropdown av_tfoot" })
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="col-md-12">
+            <label class="av_thead">
+                @Html.CheckBoxFor(model => model.Sort_Priority, new { @style = "display:none", onclick = "CheckSort('Priority')" })
+                @Html.DisplayNameFor(model => model.Sort_Priority)
+            </label>
+        </div>
+        <div class="col-md-12">
+            @Html.DropDownListFor(model => Model.Priority, ViewBag.Priority as IEnumerable<SelectListItem>, "Выберите", new { @class = "grouped_dropdown av_tfoot" })
+        </div>
+    </div>
+    <div class="col-md-3 form-group">
+        <div class="col-md-12">
+            <label class="av_thead">
+                @Html.CheckBoxFor(model => model.Sort_Title, new { @style = "display:none", onclick = "CheckSort('Title')" })
+                @Html.DisplayNameFor(model => model.Sort_Title)
+            </label>
+        </div>
+        <div class="col-md-12">
+            @Html.TextBoxFor(model => Model.Title, new { @class = "form-control text-right", @style = "height: 28px;" })
+        </div>
+    </div>
+
+                @Html.CheckBoxFor(model => model.Sort_IS_Aviscloud_TaskOutcome, new { @style = "display:none", onclick = "CheckSort('IS_Aviscloud_TaskOutcome')" })
+                @Html.DisplayNameFor(model => model.Sort_IS_Aviscloud_TaskOutcome)
+          
+    <div class="col-md-3">
+        
+            <div class=" form-group">
+                <div class="col-md-12">
+                    <label class="av_thead">
+                        @Html.CheckBoxFor(model => model.Sort_Body, new { @style = "display:none", onclick = "CheckSort('Body')" })
+                        @Html.DisplayNameFor(model => model.Sort_Body)
+                    </label>
+                </div>
+                <div class="col-md-12">
+                    @Html.TextBoxFor(model => Model.Body, new { @class = "form-control text-right", @style = "height: 28px;" })
+                </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="col-md-12" style="padding:0px;">
+    @if (ViewBag.Tasks_Null_Count > 0)
+    {
+        col_md = "col-md-8";
+        col_md_2 = "col-md-4";
+    }
+    <div class="@col_md" style="padding-right: 0px">
+
+        <div class="t_doc t_items ">
+           
+            @foreach (var item in Model.Page_Avis_Tasks)
+                    {
+                        if (datepr != item.DueDate.Value.ToShortDateString())
+                        {
+                            datepr = item.DueDate.Value.ToShortDateString();
+                    <div style="display: block;">
+                        <div style="display: table-caption;
+                height: 0px;
+                            ">
+                    <span style="position: relative;  z-index:999; margin-left: 10px; display: block; background-color: #093; top: 5px; color: #fff; font-size: 26px; width: 47px; text-align: center; height: 37px;"> @item.DueDate.Value.Day</span>
+
+
+                        </div>
+
+
+                                                <div class="col-md-12" style="
+                                color: #fff;
+                                background-color: #808080;
+                                text-transform: uppercase;
+                                padding: 0px; margin-bottom:8px;
+">
+                            <div class="col-md-1"> </div>
+                            <div class="col-md-5" style="padding-left:15px;"> @item.DueDate.Value.ToString("MMMM", System.Globalization.CultureInfo.GetCultureInfo("ru-RU"))</div>
+                            <div class="col-md-6" style="text-align: right;"> @item.DueDate.Value.ToString("dddd", System.Globalization.CultureInfo.GetCultureInfo("ru-RU"))</div>
+
+                        </div>
+                    </div>
+                }
+
+                <div class="col-md-12 row_item" style="background: #fff;  min-height: 56px; margin-bottom: 15px; padding-top: 7px; padding-left: 15px; padding-bottom: 5px;">
+                    <div class="col-md-12" style="padding:0px;">
+                        <div class="col-md-1" style="padding-top: 10px;">
+                            <div>
+
+                                @if (item.Status == "Завершена")
+                                {
+                                    if (item.IS_Aviscloud_TaskOutcome != "Отклонен")
+                                    {
+                                        <div>
+                                            <span style="padding-top: 2px; font-size: 24px; color: #009933;" class="icomoon icon-circle-checked"></span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div>
+                                            <span style="padding-top: 2px; font-size: 24px; color: #ea4c0f;" class="icomoon icon-circle-cancel"></span>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    if (item.DueDate >= DateTime.Now)
+                                    {
+
+                                        <div class="radialIndicator" style="color: #009933;" data-percentcomplete="@(item.PercentComplete * 100)"></div>
+                                    }
+                                    else
+                                    {
+                                        <span style="padding-top: 2px; font-size: 24px; color: #ea4c0f;" class="icomoon icon-clock"></span> @*красные*@
+                                    }
+                                }
+
+                            </div>
+                            <div style="text-align: center;" class="av_head">
+                                @if (item.comCount > 0)
+                                {
+                                    <b>@item.comCount</b>
+                                }
+                            </div>
+
+                        </div>
+                        <div class="col-md-2">@item.IS_Aviscloud_Task_Type</div>
+                        <div class="col-md-2">@item.Priority</div>
+                        <div class="col-md-5 av_head">@item.Title</div>
+
+
+                        <div class="col-md-2" style="text-align: right; padding:0px">
+                            <div>
+                                <p>@item.AssignedTo</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12" style="padding:0px">
+                        @if (@item.Body != null)
+                        {
+                            <div class="col-md-1"> </div>
+                            <div class="col-md-11" style="padding:0px; border-top: 1px solid rgb(0 0 0 / 30%)">
+                                @item.Body
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            }
+
+
+        </div>
+    </div>
+
+    <div class="@col_md_2" style="padding-right:0px; padding-left:25px">
+        <div style="display: block;">
+            <div style="        display: table-caption;
+        height: 0px;
+
+    ">
+                <span style="position: relative;  z-index:999; padding-top: 5px;
+        padding-left: 6px; margin-left: 10px; display: block; background-color: #093; top: 5px;  font-size: 26px; width: 47px; text-align: center; height: 37px;">
+                    <svg style="        width: 30px;
+        height: 30px;
+        color: #fff;
+" viewBox="0 0 30 30">
+                        <path fill="currentColor" d="M6,2H18V8H18V8L14,12L18,16V16H18V22H6V16H6V16L10,12L6,8V8H6V2M16,16.5L12,12.5L8,16.5V20H16V16.5M12,11.5L16,7.5V4H8V7.5L12,11.5M10,6H14V6.75L12,8.75L10,6.75V6Z" />
+                    </svg>
+                </span>
+            </div>
+
+            <div class="col-md-12" style="
+                                color: #fff;
+                                background-color: #808080;
+                                text-transform: uppercase;
+                                padding: 0px; margin-bottom:8px;
+">
+
+                <div class="col-md-6" style="padding-left: 70px; ">Бессрочные</div>
+            </div>
+        </div>
+        <div class="t_doc t_items ">
+            @foreach (var item in ViewBag.Tasks_Null_DD)
+            {
+                Random rnd = new Random();
+                double comCount = rnd.Next(0,10);
+
+                <div class="col-md-12 row_item"  style="background: #fff;  min-height: 56px; margin-bottom: 15px; padding-top: 7px; padding-bottom: 5px; padding-right: 0px">
+                    <div class="col-md-2" style="padding:0px">
+                        <div class="col-md-12" style="        padding-top: 10px;
+        padding-right: 0px;
+        text-align: center;
+">
+                            <img style="width: 30px;" src="~/Content/img/Договоры.png" />
+                        </div>
+                        <div style="text-align: center; padding:0px;" class="col-md-12">
+                            @if (comCount > 0)
+                            {
+                                <b>@comCount</b>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="col-md-12 av_head">@item.Title</div>
+                        <div class="col-md-12">
+
+                            <div class="col-md-5">@item.IS_Aviscloud_Task_Type</div>
+
+                            <div class="col-md-7" style="text-align:right; padding: 0px;">
+                                    <div>
+                                           <p>@item.AssignedTo</p>
+                                    </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            @if (@item.Body != null)
+                            {
+                                <div class="col-md-1"> </div>
+                                <div class="col-md-11" style="padding:0px; border-top: 1px solid rgb(0 0 0 / 30%)">
+                                    @item.Body
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+}
+</div>
+<style>
+    .avis_display_none {
+        display: none;
+    }
+
+    .row_item:hover {
+        color: #093;
+        border-color: #093;
+        box-shadow: 0px 0px 7px 2px #093;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #093;
+        padding: 0px;
+        margin-right: 15px;
+    }
+
+    #pageSize {
+        float: right;
+        box-shadow: 0 5px 7px -2px rgb(0 0 0 / 30%);
+        height: 36px;
+        -webkit-appearance: auto;
+        background-color: #fff;
+    }
+
+    .pagination {
+        box-shadow: 0 5px 7px -2px rgb(0 0 0 / 30%);
+    }
+
+    .av_row {
+        padding-right: 15px;
+    }
+
+    .av_thead {
+        text-align: left;
+        float: left;
+        padding-right: 15px;
+        width: 100%;
+        text-transform: initial;
+        font-weight: bold;
+    }
+
+    .ms-Icon {
+        font-size: 20px;
+    }
+
+    .select2-container--open .select2-dropdown--below {
+        min-width: 300px;
+    }
+
+    tfoot {
+        display: table-header-group;
+    }
+
+
+    .select2-selection {
+        font-size: .9em;
+        font-weight: normal;
+        height: 30px;
+    }
+
+    .av_state {
+        max-width: 70px;
+        /* position: relative; */
+        overflow: hidden;
+        /* vertical-align: top; */
+        text-overflow: ellipsis;
+    }
+
+    .av_tfoot {
+        margin-right: 5px;
+    }
+
+    input::placeholder {
+        color: #ccc;
+    }
+
+    input {
+        border: 1px solid #fff;
+        border-bottom: 1px solid #ccc;
+        width: 100%;
+        min-width: 100px;
+    }
+
+    .t_items {
+        overflow-y: scroll;
+        max-height: calc(100vh - 230px);
+        clear: both;
+        display: block;
+    }
+
+    #t_items_paginate {
+        float: right;
+    }
+
+    .pagination {
+        margin: 0;
+        float: right;
+    }
+
+    .IconContainer {
+        font-size: 14px;
+        float: left;
+        margin: 0 5px 5px 0;
+        width: 50px;
+        height: 50px;
+        line-height: 51px;
+    }
+
+    .IconContainer-icon {
+        text-align: center;
+    }
+
+    .IconContainer-name,
+    .IconContainer-unicode {
+        display: none;
+    }
+
+    .New_png {
+        background: url('../../Content/img/New.png') no-repeat top left;
+        background-size: 35px 35px;
+        display: block;
+        width: 200px;
+        height: 35px;
+        padding-left: 40px;
+        padding-top: 5px;
+        background-color: white;
+    }
+
+        .New_png:hover {
+            box-shadow: 0px 0px 7px 2px #093;
+        }
+
+    .pagination > li > a:hover {
+        z-index: 2;
+        color: #093;
+        background-color: #fff;
+        border-color: #093;
+        box-shadow: 0px 0px 7px 2px #093;
+    }
+
+    .pagination > .active > a {
+        background-color: #093;
+        border-color: #093;
+    }
+</style>
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            createPeoplePickers();
+        });
+        $('.radialIndicator').each(function () {
+            $(this).radialIndicator({
+                barBgColor: '#ccc',
+                barColor: '#009933',
+                barWidth: 1,
+                initValue: $(this).data('percentcomplete'),
+                //roundCorner: true,
+                percentage: true,
+                radius: 12,
+                fontSize: 10
+            })
+        });
+
+        function CheckSort(sort) {
+            $('#Sort').val(sort);
+            $('#submit_Index').click()
+        }
+        $(function () {
+            $("#IS_Aviscloud_Task_Type, #Title, #Priority,#Body, #pageSize").change(function () {
+                $('#submit_Index').click()
+            });
+        });
+
+    </script>
+}

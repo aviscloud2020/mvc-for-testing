@@ -1,0 +1,119 @@
+﻿@import "Select2.min.less";
+@import "Site_base.less";
+@primary: #00b9be; //Цвет модуля color_5
+@gradus: #00b9be; //2й цвет градусника
+@second: #00b9be;
+
+.tbody_V {
+    border-right: 4px solid #c30;
+}
+
+@media only screen and (max-width: 1280px) {
+    #nav_username, #nav_office365, #nav_avisdocs {
+        display: none;
+    }
+}
+
+.m_icon_unchecked32 {
+    font-size: 26px;
+    margin-left: -22px;
+    color: @color_7;
+    display: block;
+    height: 32px;
+    width: 32px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    background-color: @color_1;
+    text-align: center;
+    box-shadow: 0 0 0 2px @color_7;
+}
+
+.dropdown-item {
+    color: #fff !important;
+    font-size: 16px;
+    /*padding-left: 15px;*/
+}
+
+.glyphicon-trash:hover {
+    color: #a94442;
+}
+
+.shadow-bottom, .navbar-fixed-top, #ribbon1, .tab-content {
+    box-shadow: 0px 5px 7px -2px rgba(0,0,0,0.3);
+}
+
+.bg-image {
+    background-image: url('../../Content/img/background.jpg');
+    background-size: cover;
+}
+
+@font-face {
+    font-family: 'playregular';
+    src: url('../fonts/playregular.ttf') format('truetype');
+}
+
+.sunburst {
+    > .sunburst-here {
+        /*border: 1px solid #ddd;*/
+        height: 290px;
+    }
+}
+
+.nav-tabs > li.active > a {
+    color: @primary;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+
+.nav > li > a:hover {
+    background-color: @primary;
+}
+
+.badge_m {
+    background-color: @primary;
+}
+
+.nav-tabs > li.active > a {
+    color: @primary;
+}
+
+.nav-tabs > li.active > a:focus {
+    color: @primary;
+}
+
+.nav-tabs > li.active > a:hover {
+    color: @primary;
+}
+
+.btn-default {
+    color: @primary;
+    border-color: @primary;
+}
+
+.btn-default:hover {
+    color: #fff;
+    background-color: @primary;
+    border-color: @primary;
+}
+
+.table-hover > tbody > tr:hover {
+    background-color: @primary;
+    color: #fff;
+}
+
+.form-control:focus {
+    border-color: @primary;
+}
+
+.btn-default:active:hover {
+    color: #fff;
+    background-color: @primary;
+    border-color: @primary;
+}
+
+.btn-default:focus {
+    color: #fff;
+    background-color: #00b9be;
+    border-color: #00b9be;
+}

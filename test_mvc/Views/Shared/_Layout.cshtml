@@ -1,0 +1,248 @@
+﻿@{string moduleName = "Задачи";}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="~/Content/img/favicon.png" type="image/png">
+    <title>Задачи – документооборот</title>
+    @Styles.Render("~/bundles/css")
+    @Scripts.Render("~/bundles/scripts")
+    <script src="~/Scripts/radialIndicator.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/localization/messages_ru.min.js" integrity="sha256-0EH7lQoXqY1HcXWYvWJWcpcwEJbxwkvDRqtCp50tqOI=" crossorigin="anonymous"></script>
+    <script src='https://statics.teams.cdn.office.net/sdk/v1.6.0/js/MicrosoftTeams.min.js'></script>
+
+
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <style>
+        #t_items > thead > tr > th {
+            font-weight: normal;
+        }
+
+        .dataTables_scroll {
+            border-bottom: 1px solid rgb(204, 204, 204);
+        }
+
+        .dtrg-level-0 {
+            background-color: #ddd
+        }
+
+        .dtrg-level-1 {
+            background-color: #eee
+        }
+    </style>
+    <script type='text/javascript'>
+        var appInsights = window.appInsights || function (config) {
+            function r(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } }
+            var t = { config: config }, u = document, e = window, o = 'script', s = u.createElement(o), i, f; for (s.src = config.url || '//az416426.vo.msecnd.net/scripts/a/ai.0.js', u.getElementsByTagName(o)[0].parentNode.appendChild(s), t.cookie = u.cookie, t.queue = [], i = ['Event', 'Exception', 'Metric', 'PageView', 'Trace', 'Ajax']; i.length;)r('track' + i.pop()); return r('setAuthenticatedUserContext'), r('clearAuthenticatedUserContext'), config.disableExceptionTracking || (i = 'onerror', r('_' + i), f = e[i], e[i] = function (config, r, u, e, o) { var s = f && f(config, r, u, e, o); return s !== !0 && t['_' + i](config, r, u, e, o), s }), t
+        }({
+            instrumentationKey: '071263aa-dbeb-4661-9b19-8e50187f88b3'
+        });
+        $(document).ready(function () {
+            $.each($("[data-loadthisajax]"), function () {
+                var ajx = ajaxLoadContent(this);
+                //  requests.push(ajx);
+            });
+        })
+        function ajaxLoadContent(elementId) {
+            var that = $(elementId);
+            var ajaxUrl = that.data("loadthisajax");
+            return $.get(ajaxUrl, function (html) { that.html(html); });
+        }
+
+        window.appInsights = appInsights;
+        appInsights.trackPageView();
+    </script>
+</head>
+<body class="bg-image" style="overflow:auto">
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="margin-bottom: 0px;">
+        <!-- Контейнер (определяет ширину Navbar) -->
+        <div class="container-fluid">
+            <!-- Заголовок -->
+            <!-- Основная часть меню (может содержать ссылки, формы и другие элементы) -->
+            <div class="navbar-header" style="align-items: center;">
+                <!-- Кнопка «Гамбургер» отображается только в мобильном виде (предназначена для открытия основного содержимого Navbar)@**@ -->
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-main" style="float: left;">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-main">
+                @*style="border-right: 1px solid #9d9d9d; margin-right:10px"*@
+                <ul class="nav navbar-nav">
+                    <li class="Avis_menu">
+                        <a href="#" data-target="#myModal_doc" data-toggle="modal" class="bootstro glyphicon glyphicon-th" style="font-size: 25px;" id="a_myModal">
+                        </a>
+                    </li>
+                    <li class="Avis_menu"><a href="#" style="font-size: 25px;line-height: .9;" onclick="window.history.back()" class="icomoon icon-page-left"></a></li>
+                    <li class="Avis_menu"><a href="#" style="font-size: 25px;line-height: .9;" onclick="window.history.forward()" class="icomoon icon-page-right"></a></li>
+                    <li class="Avis_menu"><a href="#" style="font-size: 25px;line-height: .9;" onclick="window.location.reload(true)" class="icomoon icon-update"></a></li>
+                    <li class="Avis_menu" id="nav_avisdocs"><a href="@Url.Action("AvisChartMenu", "Home")" target="_top" class="bootstro" data-bootstro-placement="bottom" data-bootstro-content="Ссылка на панель мониторинга." data-bootstro-title="Документооборот" data-bootstro-step="2" data-bootstro-width="300px">Документооборот</a></li>
+
+                    <li class="Avis_menu" id="nav_modulename">@Html.ActionLink(moduleName, "Index", new { @class = "bootstro", @data_bootstro_placement = "bottom", data_bootstro_content = "Текущий (используемый в данный момент) модуль.", @data_bootstro_title = moduleName, @data_bootstro_step = "3", @data_bootstro_width = "300px" })</li>
+
+                    <li class="Avis_menu"><a href="@Url.Action("Index")">Мои незавершенные</a></li>
+                    <li class="Avis_menu nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" style="font-size: 19px;" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-option-vertical"></span></a>
+                        <ul class="nav dropdown-menu pull-right" style="background-color:#666; color:#fff; ">
+                            <li><a class="dropdown-item" href="@Url.Action("Index")">Мои незавершенные</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Index")">Мои завершенные</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Index")">Назначенные мной незавершенные</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("Index")">Назначенные мной завершенные</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="Avis_menu">@Ajax.ActionLink(" ", "Search", "", new AjaxOptions { OnBegin = "$('#myModal_Search').modal('show')", HttpMethod = "Get", UpdateTargetId = "div_search", LoadingElementId = "div_search_loader", AllowCache = false }, new { @class = "icomoon icon-search-2 bootstro", @data_bootstro_placement = "bottom", data_bootstro_content = "Инструкция по работе с данным модулем.", @data_bootstro_title = "Справка", @data_bootstro_step = "5", @data_bootstro_width = "300px" })</li>
+
+                    <li class="Avis_menu"><a href="#" id="a_AccessCode" class="glyphicon glyphicon-phone bootstro" data-target="#myModal_AccessCode" data-toggle="modal" data-bootstro-placement="bottom" data-bootstro-content="Код доступа для мобильного приложения." data-bootstro-title="Мобильное приложение" data-bootstro-step="4" data-bootstro-width="300px"></a></li>
+                    <li class="Avis_menu">
+                        <a href="#" class="glyphicon glyphicon-cog" id="a_Admin_Panel" data-target="#myModal_Right_admin" data-toggle="modal">
+                        </a>
+                    </li>
+                    <li class="Avis_menu"><a style="font-size: 24px;" href="https://avisinstruction.azurewebsites.net/avisdocs/tasks" target="_blank" class="bootstro" data-bootstro-placement="bottom" data-bootstro-content="Справка." data-bootstro-title="Справка" data-bootstro-step="2" data-bootstro-width="300px">?</a></li>
+                    <li>
+                        <a href="https://portal.office.com/account/" style="padding: 15px 0 0 0;" target="_blank" class="bootstro" data-bootstro-placement="bottom" data-bootstro-content="Пользователь, от чьего имени производится работа с модулем." data-bootstro-title="Имя текущего пользователя" data-bootstro-step="6" data-bootstro-width="300px">
+                            <t id="nav_username">Иванов И.И.</t>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div style="height:52px"></div>
+    <div>
+        <div id="div_loader" class="loader-line" style="display: none;"></div>
+        <div id="innerWrapper">
+            @RenderBody()
+        </div>
+    </div>
+
+
+    <div class="modal right fade" id="myModal_Right_admin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
+        <div class="modal-dialog" role="document" style="width:90%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel1">Панель настройки</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="div_admin_loader" class="loader-line" style="display:none; position:relative;"></div>
+
+                    <div id="div_pv_RelatedItems" data-loadthisajax="@Url.Action("Admin_Panel", "Home")"></div>
+                </div>
+            </div><!-- modal-content -->
+        </div><!-- modal-dialog -->
+    </div>
+    <div class="modal left fade" id="myModal_doc" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3">
+        <div class="modal-dialog" style="width:350px" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close glyphicon glyphicon-th" data-dismiss="modal" style="margin: 0px; float:left; padding-right:10px;"></button>
+
+                    <a id="doc" href="https://portal.office.com/" target="_blank" style="color:#9d9d9d; float: left;" class="" data-toggle="modal">
+                        <div style="padding-left:10px; padding-right:10px; font-size: 19px; border-left:1px solid #9d9d9d">
+                            Offiсe 365
+                        </div>
+                    </a>
+                    <a id="doc_s" href="@Url.Action("AvisChartMenu", "Home")" target="_top" style="color:#9d9d9d; float: left;" class="" data-toggle="modal">
+                        <div style="padding-left:10px; font-size: 19px; border-left:1px solid #9d9d9d">
+                            Документооборот
+                        </div>
+                    </a>
+                </div>
+                <div class="modal-body">
+                    <div id="div_avismenu_loader" class="loader-line" style="display:none; position:relative;"></div>
+                    <div id="div_avismenu">
+                    </div>
+                </div>
+            </div><!-- modal-content -->
+        </div><!-- modal-dialog -->
+    </div>
+
+    <div class="modal fade" id="myModal_AccessCode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Мобильное приложение</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="AccessCode"><div style="margin-left:50%;" class="loader-circle-30px"></div></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal right fade" id="myModal_Search" tabindex="-1" role="dialog" aria-labelledby="myModal_Search_Label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModal_Search_Label">Расширенный поиск</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="div_search_loader" class="loader-line" style="display:none; position:relative;"></div>
+                    <div id="div_search"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal right fade" id="Modal_Right" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+        <div class="modal-dialog" role="document">
+            <div class="modal-header" style="height:52px; border-bottom:0px;">
+            </div>
+            <div class="modal-content" style="height: 100%;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="icomoon icon-close text-hover" style="padding: 4px;"></span>
+                </button>
+                <div id="div_frame1">
+                    <div id="div_loader" class="loader-line" style="display: none;"></div>
+                    <div id="Form1"></div>
+                    <iframe id="iframe1" name="iframe1" src="about:blank" style="float:left; width:900px; height: calc(100vh - 100px);" frameborder="0"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        microsoftTeams.initialize();
+        $(document).ready(function () {
+          createPeoplePickers();
+        });
+
+        function setViewIntro() {
+            localStorage.setItem("viewintro", "yes");
+        }
+
+        function toggleModalBackground() {
+            $(".modal-backdrop").toggle();
+        }
+
+        $('#Modal_Right').on('hidden.bs.modal', function () {
+            $("#iframe1").attr('src', 'about:blank');
+        })
+
+
+        var url = document.location.toString();
+        if (url.match('#')) {
+            $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+        }
+
+        $('.nav-tabs a').on('shown.bs.tab', function (e) {
+            window.location.hash = e.target.hash;
+        })
+
+        function openRightModal(url)
+    </script>
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>
