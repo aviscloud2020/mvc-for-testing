@@ -61,7 +61,8 @@ namespace test_mvc.Controllers
                     Priority = priority(rnd.Next(0,2)),
                     IS_Aviscloud_TaskOutcome = "Незавершена",
                     AssignedTo = name(rnd.Next(0,5)),
-                    comCount = rnd.Next(0, 5)
+                    comCount = rnd.Next(0, 5),
+                    PercentComplete = rnd.Next(0, 100)
 
 
                 });
